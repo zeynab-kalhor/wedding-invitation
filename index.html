@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سینماتیک - Mina & Sina</title>
+    
+    <!-- فونت گوگل برای بخش‌های انگلیسی -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Vazirmatn:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d0d0d;
+            color: #f4efea;
+            font-family: 'Vazirmatn', 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+        }
+
+        /* ویدیو پس‌زمینه که به اسکرول وصل می‌شود */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        video.scrolly-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.65) contrast(1.1);
+        }
+
+        /* لایه‌های محتوا روی ویدیو */
+        .content-overlay {
+            position: relative;
+            z-index: 2;
+        }
+
+        section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* استایل اختصاصی بخش‌ها */
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: #d4af37;
+        }
+
+        .cinematic-text {
+            max-width: 600px;
+            background: rgba(13, 13, 13, 0.4);
+            backdrop-filter: blur(8px);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cinematic-text h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .details-card {
+            background: #fdfbf7;
+            color: #2b2b2b;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            max-width: 500px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .details-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            border-bottom: 1px solid #d4af37;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        /* اسکرول‌بار مخفی */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- لایه ویدیو سینماتیک -->
+    <div class="video-container">
+        <video class="scrolly-video" playsinline webkit-playsinline muted preload="auto">
+            <source src="wedding invitation.MOV" type="video/quicktime">
+            <source src="wedding invitation.MOV" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- محتوای متنی روی ویدیو -->
+    <div class="content-overlay">
+        
+        <!-- سکانس ۱ -->
+        <section class="hero">
+            <div class="cinematic-text" style="opacity: 1; transform: none;">
+                <p>A LOVE STORY WORTH REMEMBERING</p>
+                <h1>MINA & SINA</h1>
+                <p>WE'RE GETTING ENGAGED</p>
+            </div>
+        </section>
+
+        <!-- سکانس ۲ -->
+        <section>
+            <div class="cinematic-text js-anim">
+                <h2>UNTIL THE CURTAIN RISES</h2>
+                <p>بعضی قلب‌ها برای پیدا کردن هم مقدر شده‌اند...</p>
+            </div>
+        </section>
+
+        <!-- سکانس ۳ (کارت اطلاعات) -->
+        <section>
+            <div class="details-card js-anim">
+                <h3>DETAILS</h3>
+                <div class="info-row">
+                    <span>تاریخ:</span>
+                    <span>۳۰ مرداد ۱۴۰۵</span>
+                </div>
+                <div class="info-row">
+                    <span>زمان:</span>
+                    <span>۸ شب تا ۱۱ شب</span>
+                </div>
+                <div class="info-row">
+                    <span>مکان:</span>
+                    <span>عمارت رویایی</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- کتابخانه‌های GSAP برای کنترل اسکرول -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- اسکریپت اختصاصی -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const video = document.querySelector('.scrolly-video');
+
+        video.onloadedmetadata = function() {
+            let tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".content-overlay",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1
+                }
+            });
+
+            tl.fromTo(video, 
+                { currentTime: 0 }, 
+                { currentTime: video.duration || 10, ease: "none" }
+            );
+        };
+
+        const animatedElements = document.querySelectorAll('.js-anim');
+        animatedElements.forEach((el) => {
+            gsap.to(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 70%",
+                    end: "top 30%",
+                    toggleActions: "play reverse play reverse"
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1
+            });
+        });
+    </script>
+</body>
+</html>
