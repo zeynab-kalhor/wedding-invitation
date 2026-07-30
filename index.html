@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سینماتیک - Mina & Sina</title>
-    
-    <!-- فونت گوگل برای بخش‌های انگلیسی -->
+    <title>دعوتنامه سینماتیک - Mina & Sina</title>
+
+    <!-- فونت‌های گوگل -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Vazirmatn:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Vazirmatn:wght@400;600&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
     <style>
         * {
             margin: 0;
@@ -25,7 +24,7 @@
             overflow-x: hidden;
         }
 
-        /* ویدیو پس‌زمینه که به اسکرول وصل می‌شود */
+        /* پس‌زمینه ویدیو */
         .video-container {
             position: fixed;
             top: 0;
@@ -33,17 +32,15 @@
             width: 100vw;
             height: 100vh;
             z-index: 1;
-            overflow: hidden;
         }
 
         video.scrolly-video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.65) contrast(1.1);
         }
 
-        /* لایه‌های محتوا روی ویدیو */
+        /* لایه متون و کلیک‌ها روی ویدیو */
         .content-overlay {
             position: relative;
             z-index: 2;
@@ -55,166 +52,213 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            padding: 20px;
+            position: relative;
         }
 
-        /* استایل اختصاصی بخش‌ها */
-        .hero h1 {
+        /* ۱. منطقه کلیک روی مهر موم (مهر پاکت نامه در سکانس اول) */
+        .start-click-area {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* ۲. شمارش معکوس روی ساعت */
+        .countdown-container {
+            position: absolute;
+            bottom: 32%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            direction: ltr;
+            z-index: 10;
+            background: rgba(13, 13, 13, 0.35);
+            padding: 10px 22px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-box .num {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 4rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #fdfbf7;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
         }
 
-        .hero p {
-            font-size: 1.2rem;
+        .time-box .label {
+            font-size: 0.75rem;
             letter-spacing: 2px;
             color: #d4af37;
+            text-transform: uppercase;
         }
 
-        .cinematic-text {
-            max-width: 600px;
-            background: rgba(13, 13, 13, 0.4);
-            backdrop-filter: blur(8px);
-            padding: 40px;
-            border-radius: 8px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            opacity: 0;
-            transform: translateY(30px);
+        /* ۳. لینک کلیک‌پذیر روی لوکیشن (نشان) در کارت پایانی */
+        .location-click-area {
+            position: absolute;
+            bottom: 22%;
+            width: 280px;
+            height: 65px;
+            cursor: pointer;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0); /* کاملاً شفاف روی کارت ویدیو */
         }
 
-        .cinematic-text h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+        /* دکمه پخش و قطع موزیک */
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(13, 13, 13, 0.7);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            color: #d4af37;
+            padding: 10px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            display: none;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.85rem;
         }
 
-        .details-card {
-            background: #fdfbf7;
-            color: #2b2b2b;
-            padding: 40px;
-            border-radius: 4px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            max-width: 500px;
-            width: 100%;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .details-card h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            border-bottom: 1px solid #d4af37;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 15px 0;
-            font-size: 1.1rem;
-        }
-
-        /* اسکرول‌بار مخفی */
         ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
+            width: 0;
         }
     </style>
 </head>
 <body>
 
-   <!-- لایه ویدیو سینماتیک -->
+    <!-- موزیک پس‌زمینه (فایل music.mp3 را کنار همین فایل آپلود کنید) -->
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🔊 موزیک</button>
+
+    <!-- ویدیوی اصلی شما -->
     <div class="video-container">
-        <video class="scrolly-video" playsinline webkit-playsinline muted preload="auto">
+        <video class="scrolly-video" id="mainVideo" playsinline webkit-playsinline muted preload="auto">
             <source src="wedding.mp4" type="video/mp4">
         </video>
     </div>
 
-    <!-- محتوای متنی روی ویدیو -->
     <div class="content-overlay">
         
-        <!-- سکانس ۱ -->
-        <section class="hero">
-            <div class="cinematic-text" style="opacity: 1; transform: none;">
-                <p>A LOVE STORY WORTH REMEMBERING</p>
-                <h1>MINA & SINA</h1>
-                <p>WE'RE GETTING ENGAGED</p>
+        <!-- سکانس ۱: کلیک روی مهر پاکت نامه برای پخش موزیک -->
+        <section>
+            <div class="start-click-area" onclick="startAudio()" title="برای فعال شدن صدا کلیک کنید"></div>
+        </section>
+
+        <!-- سکانس ۲: نمایش شمارش معکوس زنده روی فریم ساعت -->
+        <section>
+            <div class="countdown-container">
+                <div class="time-box">
+                    <span class="num" id="days">00</span>
+                    <span class="label">Days</span>
+                </div>
+                <div class="time-box">
+                    <span class="num" id="hours">00</span>
+                    <span class="label">Hours</span>
+                </div>
+                <div class="time-box">
+                    <span class="num" id="minutes">00</span>
+                    <span class="label">Minutes</span>
+                </div>
+                <div class="time-box">
+                    <span class="num" id="seconds">00</span>
+                    <span class="label">Seconds</span>
+                </div>
             </div>
         </section>
 
-        <!-- سکانس ۲ -->
-        <section>
-            <div class="cinematic-text js-anim">
-                <h2>UNTIL THE CURTAIN RISES</h2>
-                <p>بعضی قلب‌ها برای پیدا کردن هم مقدر شده‌اند...</p>
-            </div>
-        </section>
+        <!-- سکانس ۳: بخش تصویر دو نفره (فقط ویدیو) -->
+        <section></section>
 
-        <!-- سکانس ۳ (کارت اطلاعات) -->
+        <!-- سکانس ۴: کارت دعوت اصلی + لینک مستقیم نشان روی لوکیشن -->
         <section>
-            <div class="details-card js-anim">
-                <h3>DETAILS</h3>
-                <div class="info-row">
-                    <span>تاریخ:</span>
-                    <span>۳۰ مرداد ۱۴۰۵</span>
-                </div>
-                <div class="info-row">
-                    <span>زمان:</span>
-                    <span>۸ شب تا ۱۱ شب</span>
-                </div>
-                <div class="info-row">
-                    <span>مکان:</span>
-                    <span>عمارت رویایی</span>
-                </div>
-            </div>
+            <a href="https://nshn.ir/d6rbvBycGxWz1i" target="_blank" class="location-click-area" title="مسیریابی با نشان"></a>
         </section>
 
     </div>
 
-    <!-- کتابخانه‌های GSAP برای کنترل اسکرول -->
+    <!-- کتابخانه‌های انیمیشن GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-    <!-- اسکریپت اختصاصی -->
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        const video = document.querySelector('.scrolly-video');
+        const video = document.getElementById('mainVideo');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicToggle');
 
+        // محاسبه شمارش معکوس تا تاریخ ۳۰ مرداد ۱۴۰۵ (۲۱ آگوست ۲۰۲۶)
+        const targetDate = new Date("August 21, 2026 20:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = String(days).padStart(2, '0');
+                document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+                document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+                document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // شروع صدا با لمس/کلیک کاربر
+        function startAudio() {
+            bgMusic.play().then(() => {
+                musicBtn.style.display = 'block';
+            }).catch(e => console.log(e));
+        }
+
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicBtn.innerText = "🔊 موزیک";
+            } else {
+                bgMusic.pause();
+                musicBtn.innerText = "🔈 سکوت";
+            }
+        }
+
+        // همگام‌سازی ویدیو با اسکرول دست کاربر
         video.onloadedmetadata = function() {
             let tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: ".content-overlay",
                     start: "top top",
                     end: "bottom bottom",
-                    scrub: 1
+                    scrub: 0.8
                 }
             });
 
             tl.fromTo(video, 
                 { currentTime: 0 }, 
-                { currentTime: video.duration || 10, ease: "none" }
+                { currentTime: video.duration || 17, ease: "none" }
             );
         };
-
-        const animatedElements = document.querySelectorAll('.js-anim');
-        animatedElements.forEach((el) => {
-            gsap.to(el, {
-                scrollTrigger: {
-                    trigger: el,
-                    start: "top 70%",
-                    end: "top 30%",
-                    toggleActions: "play reverse play reverse"
-                },
-                opacity: 1,
-                y: 0,
-                duration: 1
-            });
-        });
     </script>
 </body>
 </html>
