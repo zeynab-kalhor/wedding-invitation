@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دعوتنامه سینماتیک - Mina & Sina</title>
 
-    <!-- فونت‌های گوگل -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Vazirmatn:wght@400;600&display=swap" rel="stylesheet">
@@ -40,7 +39,6 @@
             object-fit: cover;
         }
 
-        /* لایه متون و کلیک‌ها روی ویدیو */
         .content-overlay {
             position: relative;
             z-index: 2;
@@ -55,14 +53,18 @@
             position: relative;
         }
 
-        /* ۱. منطقه کلیک روی مهر موم (مهر پاکت نامه در سکانس اول) */
+        /* ۱. منطقه کلیک روی مهر موم */
         .start-click-area {
             position: absolute;
-            width: 180px;
-            height: 180px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             cursor: pointer;
-            z-index: 10;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.01); /* قابل لمس روی تمام گوشی‌ها */
         }
 
         /* ۲. شمارش معکوس روی ساعت */
@@ -75,7 +77,7 @@
             gap: 20px;
             direction: ltr;
             z-index: 10;
-            background: rgba(13, 13, 13, 0.35);
+            background: rgba(13, 13, 13, 0.4);
             padding: 10px 22px;
             border-radius: 8px;
             backdrop-filter: blur(5px);
@@ -103,7 +105,7 @@
             text-transform: uppercase;
         }
 
-        /* ۳. لینک کلیک‌پذیر روی لوکیشن (نشان) در کارت پایانی */
+        /* ۳. لینک کلیک‌پذیر روی لوکیشن (نشان) */
         .location-click-area {
             position: absolute;
             bottom: 22%;
@@ -111,16 +113,16 @@
             height: 65px;
             cursor: pointer;
             z-index: 10;
-            background: rgba(255, 255, 255, 0); /* کاملاً شفاف روی کارت ویدیو */
+            background: transparent;
         }
 
-        /* دکمه پخش و قطع موزیک */
+        /* دکمه موزیک */
         .music-btn {
             position: fixed;
             bottom: 20px;
             left: 20px;
             z-index: 100;
-            background: rgba(13, 13, 13, 0.7);
+            background: rgba(13, 13, 13, 0.75);
             border: 1px solid rgba(212, 175, 55, 0.5);
             color: #d4af37;
             padding: 10px 18px;
@@ -139,14 +141,14 @@
 </head>
 <body>
 
-    <!-- موزیک پس‌زمینه (فایل music.mp3 را کنار همین فایل آپلود کنید) -->
+    <!-- موزیک پس‌زمینه -->
     <audio id="bgMusic" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
     <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🔊 موزیک</button>
 
-    <!-- ویدیوی اصلی شما -->
+    <!-- ویدیوی اصلی -->
     <div class="video-container">
         <video class="scrolly-video" id="mainVideo" playsinline webkit-playsinline muted preload="auto">
             <source src="wedding.mp4" type="video/mp4">
@@ -155,13 +157,13 @@
 
     <div class="content-overlay">
         
-        <!-- سکانس ۱: کلیک روی مهر پاکت نامه برای پخش موزیک -->
-        <section>
-            <div class="start-click-area" onclick="startAudio()" title="برای فعال شدن صدا کلیک کنید"></div>
+        <!-- سکانس ۱: دکمه مهر موم -->
+        <section id="sec-1">
+            <div class="start-click-area" onclick="openAndPlay()" title="برای باز شدن کلیک کنید"></div>
         </section>
 
-        <!-- سکانس ۲: نمایش شمارش معکوس زنده روی فریم ساعت -->
-        <section>
+        <!-- سکانس ۲: شمارش معکوس -->
+        <section id="sec-2">
             <div class="countdown-container">
                 <div class="time-box">
                     <span class="num" id="days">00</span>
@@ -182,17 +184,16 @@
             </div>
         </section>
 
-        <!-- سکانس ۳: بخش تصویر دو نفره (فقط ویدیو) -->
-        <section></section>
+        <!-- سکانس ۳: ویدیو دو نفره -->
+        <section id="sec-3"></section>
 
-        <!-- سکانس ۴: کارت دعوت اصلی + لینک مستقیم نشان روی لوکیشن -->
-        <section>
+        <!-- سکانس ۴: لوکیشن نشان -->
+        <section id="sec-4">
             <a href="https://nshn.ir/d6rbvBycGxWz1i" target="_blank" class="location-click-area" title="مسیریابی با نشان"></a>
         </section>
 
     </div>
 
-    <!-- کتابخانه‌های انیمیشن GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
@@ -203,7 +204,7 @@
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicToggle');
 
-        // محاسبه شمارش معکوس تا تاریخ ۳۰ مرداد ۱۴۰۵ (۲۱ آگوست ۲۰۲۶)
+        // تاریخ ۳۰ مرداد ۱۴۰۵ (۲۱ آگوست ۲۰۲۶)
         const targetDate = new Date("August 21, 2026 20:00:00").getTime();
 
         function updateCountdown() {
@@ -226,11 +227,17 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // شروع صدا با لمس/کلیک کاربر
-        function startAudio() {
+        // عملکرد کلیک روی مهر: پخش موزیک + اسکرول خودکار به سکانس بعدی
+        function openAndPlay() {
             bgMusic.play().then(() => {
                 musicBtn.style.display = 'block';
             }).catch(e => console.log(e));
+
+            // اسکرول به سکانس بعدی
+            window.scrollTo({
+                top: window.innerHeight * 0.8,
+                behavior: 'smooth'
+            });
         }
 
         function toggleMusic() {
@@ -243,7 +250,7 @@
             }
         }
 
-        // همگام‌سازی ویدیو با اسکرول دست کاربر
+        // کنترل ویدیو بر اساس اسکرول
         video.onloadedmetadata = function() {
             let tl = gsap.timeline({
                 scrollTrigger: {
